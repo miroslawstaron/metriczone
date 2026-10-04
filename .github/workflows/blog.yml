@@ -13,28 +13,33 @@ jobs:
       - name: Pull new posts from metrics.blogg.gu.se
         run: |
           python3 - <<'EOF'
-          import json, re, html, urllib.request, xml.etree.ElementTree as ET
+          import json, re, html, urllib.request
           from email.utils import parsedate_to_datetime
-          req = urllib.request.Request("https://metrics.blogg.gu.se/feed/", headers={"User-Agent": "metriczone-sync"})
-          root = ET.fromstring(urllib.request.urlopen(req, timeout=30).read())
+          req = urllib.request.Request("https://metrics.blogg.gu.se/feed/", headers={"User-Agent": "Mozilla/5.0 (metriczone feed sync)", "Accept": "application/rss+xml, application/xml"})
+          raw = urllib.request.urlopen(req, timeout=30).read().decode("utf-8", "replace")
+          print(raw[:200])
+          def field(block, tag):
+              m = re.search(r"<%s[^>]*>(.*?)</%s>" % (tag, tag), block, re.S)
+              if not m:
+                  return ""
+              v = m.group(1).strip()
+              v = re.sub(r"^<!\[CDATA\[(.*)\]\]>$", r"\1", v, flags=re.S)
+              return html.unescape(v).strip()
           posts = json.load(open("posts.json", encoding="utf-8"))
           known = {p["link"] for p in posts}
           added = 0
-          for it in root.iter("item"):
-              link = (it.findtext("link") or "").strip()
+          for block in re.findall(r"<item>(.*?)</item>", raw, re.S):
+              link = field(block, "link")
               if not link or link in known:
                   continue
-              text = html.unescape(re.sub(r"<[^>]+>", " ", it.findtext("description") or ""))
+              text = re.sub(r"<[^>]+>", " ", field(block, "description"))
               text = re.sub(r"\s+", " ", text).replace("[…]", "").strip()
               if len(text) > 260:
                   text = text[:260].rsplit(" ", 1)[0] + "…"
-              posts.append({
-                  "title": html.unescape((it.findtext("title") or "").strip()),
-                  "link": link,
-                  "date": parsedate_to_datetime(it.findtext("pubDate")).strftime("%Y-%m-%d"),
-                  "cats": [c.text for c in it.findall("category") if c.text],
-                  "summary": text,
-              })
+              cats = [html.unescape(re.sub(r"^<!\[CDATA\[(.*)\]\]>$", r"\1", c.strip(), flags=re.S)) for c in re.findall(r"<category[^>]*>(.*?)</category>", block, re.S)]
+              posts.append({"title": field(block, "title"), "link": link,
+                            "date": parsedate_to_datetime(field(block, "pubDate")).strftime("%Y-%m-%d"),
+                            "cats": cats, "summary": text})
               added += 1
           posts.sort(key=lambda p: p["date"], reverse=True)
           json.dump(posts, open("posts.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
