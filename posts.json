@@ -1,18 +1,157 @@
 [
-  {"title":"Software Engineering with Agents – there is a need for more humanity in SE and beyond","link":"https://metrics.blogg.gu.se/?p=1050","date":"2026-08-10","cats":["software engineering"],"summary":"Reflections after FSE in Montreal: more AI papers, fewer field studies. Benchmarks look impressive, but we still need empirical evidence from real teams and human judgment in the loop."},
-  {"title":"Summer 2026 – where are we going now?","link":"https://metrics.blogg.gu.se/?p=1045","date":"2026-07-13","cats":["software engineering"],"summary":"With AI writing more of the code, engineers can focus on design, specifications and guardrails. AI amplifies expertise rather than replacing it."},
-  {"title":"Levels of automated code development…","link":"https://metrics.blogg.gu.se/?p=1038","date":"2026-07-10","cats":["article review","machine learning","software engineering"],"summary":"A review of a taxonomy that grades AI code generation from L0 (token-level help) to L5 (full automation). A useful vocabulary for deciding who is responsible for what."},
-  {"title":"What are you talking about – one agent asked another…","link":"https://metrics.blogg.gu.se/?p=1035","date":"2026-07-03","cats":["article review","code review","machine learning","metrics"],"summary":"When two agents program together, high semantic-alignment scores can be a warning sign of agents echoing each other. A lesson in how a metric can mislead."},
-  {"title":"Can we force LLMs to generate the code we really want?","link":"https://metrics.blogg.gu.se/?p=1030","date":"2026-06-18","cats":["article review","machine learning"],"summary":"Thirteen LLMs, one question: can feedback enforce design patterns? Simple iterative pass/fail feedback worked best, and functionality did not suffer."},
-  {"title":"My prompt is better than your prompt – how to optimize your prompts in the age of agentic AI","link":"https://metrics.blogg.gu.se/?p=1027","date":"2026-06-12","cats":["article review"],"summary":"Reinforcement learning with rewards shaped by unit-test results improves prompts beyond what manual prompt engineering achieves."},
-  {"title":"15 years of Software Center – A Look in the Mirror and over the Front Windshield","link":"https://metrics.blogg.gu.se/?p=1041","date":"2026-06-10","cats":["software engineering","metrics"],"summary":"From agile and architecture, through DevOps and CI/CD, to ML and AI: how fifteen years of industry–academia work shifted what companies need to measure."},
-  {"title":"Junior Architects with Shaky Logic: Testing AI's Real-World Coding Skills – article review","link":"https://metrics.blogg.gu.se/?p=1024","date":"2026-06-05","cats":["software engineering"],"summary":"Three LLMs against 212 real production commits: success rates from 0 to 60%. Good at small routine functions, not to be trusted alone with critical code."},
-  {"title":"The Synthetic Engineer: Measuring the Real Impact of AI on Software Delivery","link":"https://metrics.blogg.gu.se/?p=1020","date":"2026-05-18","cats":["software engineering","metrics"],"summary":"A framework combining DORA metrics, AI usage and effect metrics (acceptance, rework, stability) and occasional developer surveys, and a warning about vanity metrics such as lines of code generated."},
-  {"title":"From Gutenberg to Google and on to AI","link":"https://metrics.blogg.gu.se/?p=1016","date":"2026-05-11","cats":["software engineering"],"summary":"Like compilers hid the hardware, LLMs hide programming details, opening software creation to product owners and requirements engineers."},
-  {"title":"How to improve the code reviews","link":"https://metrics.blogg.gu.se/?p=904","date":"2024-09-23","cats":["code review","metrics"],"summary":"Reordering files in a review so the riskiest come first raises reviewer engagement and comment quality. Size metrics and LLMs can pick those files automatically."},
-  {"title":"Assessing the maturity of a metric team","link":"https://metrics.blogg.gu.se/?p=644","date":"2021-06-04","cats":["metrics"],"summary":"Three things make measurement programs last: a formal mandate, integration with product development, and a stable team over time."},
-  {"title":"Can we predict quality of service level quality based on metrics?","link":"https://metrics.blogg.gu.se/?p=535","date":"2020-08-17","cats":["metrics","quality"],"summary":"Across 700+ web services, code and interface metrics correlate with response time, availability and throughput."},
-  {"title":"Your code and AI – more than precision and recall!","link":"https://metrics.blogg.gu.se/?p=531","date":"2020-08-13","cats":["metrics","machine learning"],"summary":"AI tools for code quality should be judged by their effect on the product, not only by precision, recall and F1."},
-  {"title":"Actionable software metrics – an interesting new article","link":"https://metrics.blogg.gu.se/?p=503","date":"2020-06-26","cats":["metrics"],"summary":"A metric is actionable when it is practical, supports a decision and is fresh enough to matter. Metrics that apply across products trigger more action."},
-  {"title":"Succeeding with large scale measurement programs","link":"https://metrics.blogg.gu.se/?p=527","date":"2020-05-29","cats":["metrics"],"summary":"Measurement programs succeed when built around decisions: measurement systems, information quality and indicators that trigger action."}
+ {
+  "title": "Software Engineering with Agents – there is a need for more humanity in SE and beyond",
+  "link": "https://metrics.blogg.gu.se/?p=1050",
+  "date": "2026-08-10",
+  "cats": [
+   "software engineering"
+  ],
+  "summary": "Reflections after FSE in Montreal: more AI papers, fewer field studies. Benchmarks look impressive, but we still need empirical evidence from real teams and human judgment in the loop."
+ },
+ {
+  "title": "Summer 2026 – where are we going now?",
+  "link": "https://metrics.blogg.gu.se/?p=1045",
+  "date": "2026-07-13",
+  "cats": [
+   "software engineering"
+  ],
+  "summary": "With AI writing more of the code, engineers can focus on design, specifications and guardrails. AI amplifies expertise rather than replacing it."
+ },
+ {
+  "title": "Levels of automated code development…",
+  "link": "https://metrics.blogg.gu.se/?p=1038",
+  "date": "2026-07-10",
+  "cats": [
+   "article review",
+   "machine learning",
+   "software engineering"
+  ],
+  "summary": "A review of a taxonomy that grades AI code generation from L0 (token-level help) to L5 (full automation). A useful vocabulary for deciding who is responsible for what."
+ },
+ {
+  "title": "What are you talking about – one agent asked another…",
+  "link": "https://metrics.blogg.gu.se/?p=1035",
+  "date": "2026-07-03",
+  "cats": [
+   "article review",
+   "code review",
+   "machine learning",
+   "metrics"
+  ],
+  "summary": "When two agents program together, high semantic-alignment scores can be a warning sign of agents echoing each other. A lesson in how a metric can mislead."
+ },
+ {
+  "title": "Can we force LLMs to generate the code we really want?",
+  "link": "https://metrics.blogg.gu.se/?p=1030",
+  "date": "2026-06-18",
+  "cats": [
+   "article review",
+   "machine learning"
+  ],
+  "summary": "Thirteen LLMs, one question: can feedback enforce design patterns? Simple iterative pass/fail feedback worked best, and functionality did not suffer."
+ },
+ {
+  "title": "My prompt is better than your prompt – how to optimize your prompts in the age of agentic AI",
+  "link": "https://metrics.blogg.gu.se/?p=1027",
+  "date": "2026-06-12",
+  "cats": [
+   "article review"
+  ],
+  "summary": "Reinforcement learning with rewards shaped by unit-test results improves prompts beyond what manual prompt engineering achieves."
+ },
+ {
+  "title": "15 years of Software Center – A Look in the Mirror and over the Front Windshield",
+  "link": "https://metrics.blogg.gu.se/?p=1041",
+  "date": "2026-06-10",
+  "cats": [
+   "software engineering",
+   "metrics"
+  ],
+  "summary": "From agile and architecture, through DevOps and CI/CD, to ML and AI: how fifteen years of industry–academia work shifted what companies need to measure."
+ },
+ {
+  "title": "Junior Architects with Shaky Logic: Testing AI's Real-World Coding Skills – article review",
+  "link": "https://metrics.blogg.gu.se/?p=1024",
+  "date": "2026-06-05",
+  "cats": [
+   "software engineering"
+  ],
+  "summary": "Three LLMs against 212 real production commits: success rates from 0 to 60%. Good at small routine functions, not to be trusted alone with critical code."
+ },
+ {
+  "title": "The Synthetic Engineer: Measuring the Real Impact of AI on Software Delivery",
+  "link": "https://metrics.blogg.gu.se/?p=1020",
+  "date": "2026-05-18",
+  "cats": [
+   "software engineering",
+   "metrics"
+  ],
+  "summary": "A framework combining DORA metrics, AI usage and effect metrics (acceptance, rework, stability) and occasional developer surveys, and a warning about vanity metrics such as lines of code generated."
+ },
+ {
+  "title": "From Gutenberg to Google and on to AI",
+  "link": "https://metrics.blogg.gu.se/?p=1016",
+  "date": "2026-05-11",
+  "cats": [
+   "software engineering"
+  ],
+  "summary": "Like compilers hid the hardware, LLMs hide programming details, opening software creation to product owners and requirements engineers."
+ },
+ {
+  "title": "How to improve the code reviews",
+  "link": "https://metrics.blogg.gu.se/?p=904",
+  "date": "2024-09-23",
+  "cats": [
+   "code review",
+   "metrics"
+  ],
+  "summary": "Reordering files in a review so the riskiest come first raises reviewer engagement and comment quality. Size metrics and LLMs can pick those files automatically."
+ },
+ {
+  "title": "Assessing the maturity of a metric team",
+  "link": "https://metrics.blogg.gu.se/?p=644",
+  "date": "2021-06-04",
+  "cats": [
+   "metrics"
+  ],
+  "summary": "Three things make measurement programs last: a formal mandate, integration with product development, and a stable team over time."
+ },
+ {
+  "title": "Can we predict quality of service level quality based on metrics?",
+  "link": "https://metrics.blogg.gu.se/?p=535",
+  "date": "2020-08-17",
+  "cats": [
+   "metrics",
+   "quality"
+  ],
+  "summary": "Across 700+ web services, code and interface metrics correlate with response time, availability and throughput."
+ },
+ {
+  "title": "Your code and AI – more than precision and recall!",
+  "link": "https://metrics.blogg.gu.se/?p=531",
+  "date": "2020-08-13",
+  "cats": [
+   "metrics",
+   "machine learning"
+  ],
+  "summary": "AI tools for code quality should be judged by their effect on the product, not only by precision, recall and F1."
+ },
+ {
+  "title": "Actionable software metrics – an interesting new article",
+  "link": "https://metrics.blogg.gu.se/?p=503",
+  "date": "2020-06-26",
+  "cats": [
+   "metrics"
+  ],
+  "summary": "A metric is actionable when it is practical, supports a decision and is fresh enough to matter. Metrics that apply across products trigger more action."
+ },
+ {
+  "title": "Succeeding with large scale measurement programs",
+  "link": "https://metrics.blogg.gu.se/?p=527",
+  "date": "2020-05-29",
+  "cats": [
+   "metrics"
+  ],
+  "summary": "Measurement programs succeed when built around decisions: measurement systems, information quality and indicators that trigger action."
+ }
 ]
