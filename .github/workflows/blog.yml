@@ -15,7 +15,7 @@ jobs:
           python3 - <<'EOF'
           import json, re, html, urllib.request
           from email.utils import parsedate_to_datetime
-          req = urllib.request.Request("https://metrics.blogg.gu.se/feed/", headers={"User-Agent": "Mozilla/5.0 (metriczone feed sync)", "Accept": "application/rss+xml, application/xml"})
+          req = urllib.request.Request("https://metrics.blogg.gu.se/?feed=rss2", headers={"User-Agent": "Mozilla/5.0 (metriczone feed sync)", "Accept": "application/rss+xml, application/xml"})
           raw = urllib.request.urlopen(req, timeout=30).read().decode("utf-8", "replace")
           print(raw[:200])
           def field(block, tag):
