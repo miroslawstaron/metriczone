@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MetricZone · Measuring software today</title>
+<meta name="description" content="Which software metrics matter today, how to measure them well, and reviews of new measurement research. From delivery flow to AI-assisted development.">
+<meta property="og:title" content="MetricZone · Measuring software today">
+<meta property="og:description" content="Which software metrics matter in the age of AI, and how to measure them well.">
+<meta name="theme-color" content="#0b0f17">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230b0f17'/><path d='M5 22 L11 14 L16 18 L22 8 L27 12' stroke='%2337e6a5' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0f17; --card:#141b2b; --card2:#182034; --line:#232c40;
+  --text:#e6ebf5; --muted:#8e9ab3; --accent:#37e6a5; --accent2:#ffb547; --accent3:#7aa2ff; --red:#ff6b6b;
+  --mono:'JetBrains Mono',ui-monospace,monospace; --sans:'Space Grotesk',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;overflow-x:hidden}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+#grid{position:fixed;inset:0;z-index:-1;opacity:.55;pointer-events:none}
+
+nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(10px);background:rgba(11,15,23,.75);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+.logo{font-family:var(--mono);font-weight:600;text-decoration:none;display:flex;align-items:center;gap:10px}
+.logo b{color:var(--accent)}
+.links{display:flex;gap:26px;font-size:.93rem}
+.links a{text-decoration:none;color:var(--muted);transition:color .2s}
+.links a:hover{color:var(--text)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:10px;font-weight:600;text-decoration:none;font-size:.95rem;transition:transform .15s,box-shadow .2s;border:1px solid transparent;cursor:pointer;font-family:inherit}
+.btn.primary{background:var(--accent);color:#04140d}
+.btn.primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px -8px rgba(55,230,165,.55)}
+.btn.ghost{border-color:var(--line);color:var(--text);background:transparent}
+.btn.ghost:hover{border-color:var(--accent)}
+nav .btn{padding:8px 14px;font-size:.85rem}
+
+.hero{padding:90px 0 70px;display:grid;grid-template-columns:1.1fr .9fr;gap:50px;align-items:center}
+.eyebrow{font-family:var(--mono);color:var(--accent);font-size:.82rem;letter-spacing:.12em;text-transform:uppercase}
+h1{font-size:clamp(2.4rem,5.4vw,4.1rem);line-height:1.04;margin:14px 0 20px;letter-spacing:-.02em}
+h1 .hl{background:linear-gradient(90deg,var(--accent),var(--accent3));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--muted);font-size:1.15rem;max-width:560px}
+.cta{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap}
+
+.console{background:linear-gradient(180deg,#121a2a,#0e1420);border:1px solid var(--line);border-radius:16px;box-shadow:0 30px 80px -30px rgba(0,0,0,.8);overflow:hidden}
+.console .bar{display:flex;gap:7px;padding:12px 14px;border-bottom:1px solid var(--line);align-items:center}
+.console .bar i{width:11px;height:11px;border-radius:50%}
+.console .bar i:nth-child(1){background:#ff5f57}.console .bar i:nth-child(2){background:#febc2e}.console .bar i:nth-child(3){background:#28c840}
+.console .bar span{margin-left:10px;font-family:var(--mono);font-size:.75rem;color:var(--muted)}
+.term{font-family:var(--mono);font-size:.86rem;padding:18px;min-height:140px;color:#cfe}
+.term .p{color:var(--accent)} .term .o{color:var(--muted)}
+.cursor{display:inline-block;width:8px;height:1.05em;background:var(--accent);vertical-align:-2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.gauges{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}
+.gauge{padding:14px 16px;border-right:1px solid var(--line)}
+.gauge:last-child{border-right:0}
+.gauge small{font-family:var(--mono);font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.gauge canvas{width:100%;height:38px;display:block;margin-top:6px}
+
+section{padding:80px 0;border-top:1px solid var(--line)}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:34px;flex-wrap:wrap}
+.sec-head h2{font-size:clamp(1.8rem,3.4vw,2.6rem);margin:6px 0 0;letter-spacing:-.01em}
+.sec-head p{color:var(--muted);max-width:540px;margin:0}
+.num{font-family:var(--mono);color:var(--accent2);font-size:.82rem}
+
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.chips button{font-family:var(--mono);font-size:.78rem;background:transparent;border:1px solid var(--line);color:var(--muted);padding:6px 12px;border-radius:20px;cursor:pointer;transition:all .2s}
+.chips button.on,.chips button:hover{border-color:var(--accent);color:var(--accent)}
+
+/* metric catalog */
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.metric{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;cursor:pointer;transition:border-color .2s,transform .2s;position:relative;text-align:left;color:inherit;font:inherit}
+.metric:hover{border-color:rgba(55,230,165,.45);transform:translateY(-2px)}
+.metric .cat{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase}
+.metric h3{margin:6px 0 6px;font-size:1.08rem}
+.metric .why{color:var(--muted);font-size:.92rem;margin:0}
+.metric .more{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);font-size:.88rem}
+.metric.open .more{display:block}
+.metric.open{border-color:var(--accent)}
+.metric .more dt{font-family:var(--mono);font-size:.7rem;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin-top:8px}
+.metric .more dd{margin:2px 0 0;color:#c3cbdc}
+.metric .more dd.warn{color:var(--accent2)}
+.metric .plus{position:absolute;top:16px;right:18px;font-family:var(--mono);color:var(--muted);transition:transform .2s}
+.metric.open .plus{transform:rotate(45deg);color:var(--accent)}
+.metric.hide{display:none}
+
+/* playbook */
+.flow{display:grid;grid-template-columns:repeat(6,1fr);gap:0;margin-bottom:40px;position:relative}
+.step{padding:22px 16px 18px;border:1px solid var(--line);background:var(--card);position:relative}
+.step:first-child{border-radius:14px 0 0 14px}.step:last-child{border-radius:0 14px 14px 0}
+.step+.step{border-left:0}
+.step b{font-family:var(--mono);font-size:.72rem;color:var(--accent)}
+.step h4{margin:6px 0 6px;font-size:1rem}
+.step p{margin:0;color:var(--muted);font-size:.86rem}
+.step:not(:last-child)::after{content:"→";position:absolute;right:-9px;top:22px;z-index:2;background:var(--bg);color:var(--accent);font-family:var(--mono);font-size:.9rem;line-height:1}
+.principles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.pr{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--accent3);border-radius:10px;padding:18px 20px}
+.pr h4{margin:0 0 6px;font-size:1rem}
+.pr p{margin:0;color:var(--muted);font-size:.9rem}
+
+/* check */
+.check{display:grid;grid-template-columns:1.2fr .8fr;gap:30px;align-items:start}
+.qs{display:grid;gap:10px}
+.q{display:flex;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;cursor:pointer;user-select:none;transition:border-color .2s}
+.q input{appearance:none;width:22px;height:22px;border:2px solid var(--line);border-radius:6px;flex:none;display:grid;place-items:center;cursor:pointer;margin:0}
+.q input:checked{background:var(--accent);border-color:var(--accent)}
+.q input:checked::after{content:"✓";color:#04140d;font-weight:700;font-size:.85rem}
+.q:has(input:checked){border-color:rgba(55,230,165,.5)}
+.verdict{background:var(--card2);border:1px solid var(--line);border-radius:16px;padding:28px;position:sticky;top:90px;text-align:center}
+.dial{width:170px;height:170px;margin:0 auto 10px;position:relative}
+.dial svg{transform:rotate(-90deg)}
+.dial .val{position:absolute;inset:0;display:grid;place-items:center;font-size:2.4rem;font-weight:700}
+.verdict h3{margin:6px 0 6px}
+.verdict p{color:var(--muted);margin:0;font-size:.95rem}
+
+/* blog */
+.posts{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.post{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;display:flex;flex-direction:column;text-decoration:none;transition:border-color .2s,transform .2s}
+.post:hover{border-color:rgba(122,162,255,.55);transform:translateY(-3px)}
+.post time{font-family:var(--mono);font-size:.75rem;color:var(--accent3)}
+.post h3{margin:8px 0 8px;font-size:1.05rem;line-height:1.35}
+.post p{margin:0;color:var(--muted);font-size:.9rem;flex:1}
+.post .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.tag{font-family:var(--mono);font-size:.68rem;padding:3px 8px;border-radius:6px;background:#1b2337;color:var(--muted)}
+.tag.m{color:var(--accent);background:rgba(55,230,165,.1)}
+.post .go{font-family:var(--mono);font-size:.75rem;color:var(--accent);margin-top:12px}
+.center{text-align:center;margin-top:26px}
+
+/* go deeper */
+.deeper{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.book{display:flex;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;text-decoration:none;transition:border-color .2s}
+.book:hover{border-color:var(--accent)}
+.book img{width:70px;height:105px;object-fit:cover;border-radius:3px 6px 6px 3px;flex:none;background:#1d2a44;box-shadow:4px 6px 16px -6px #000}
+.book h4{margin:0 0 6px;font-size:.98rem;line-height:1.3}
+.book p{margin:0;color:var(--muted);font-size:.85rem}
+
+.contact{text-align:center;padding:90px 0}
+.contact h2{font-size:clamp(2rem,4.2vw,3.2rem);margin:10px 0 14px;letter-spacing:-.02em}
+.contact p{color:var(--muted);max-width:620px;margin:0 auto 28px;font-size:1.06rem}
+footer{border-top:1px solid var(--line);padding:26px 0;font-family:var(--mono);font-size:.75rem;color:var(--muted)}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+footer a{color:var(--muted)}
+
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+
+@media (max-width:980px){
+  .hero{grid-template-columns:1fr;padding-top:60px}
+  .metrics,.posts,.deeper,.principles{grid-template-columns:repeat(2,1fr)}
+  .flow{grid-template-columns:repeat(3,1fr);gap:10px}
+  .step,.step:first-child,.step:last-child{border-radius:12px;border:1px solid var(--line)}
+  .step::after{display:none}
+  .check{grid-template-columns:1fr}
+  .verdict{position:static}
+  .links{display:none}
+}
+@media (max-width:640px){
+  .metrics,.posts,.deeper,.principles{grid-template-columns:1fr}
+  .flow{grid-template-columns:1fr 1fr}
+  .wrap{padding:0 16px}
+  .gauges{grid-template-columns:1fr 1fr}
+  .gauge:nth-child(3){display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<canvas id="grid"></canvas>
+
+<nav>
+  <div class="wrap">
+    <a class="logo" href="#top">
+      <svg width="26" height="26" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#141b2b"/><path d="M5 22 L11 14 L16 18 L22 8 L27 12" stroke="#37e6a5" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      metric<b>zone</b>
+    </a>
+    <div class="links">
+      <a href="#metrics">Metrics that matter</a>
+      <a href="#howto">How to measure</a>
+      <a href="#check">Metric check</a>
+      <a href="#blog">From the blog</a>
+    </div>
+    <a class="btn primary" href="#blog">Latest posts</a>
+  </div>
+</nav>
+
+<header class="wrap hero" id="top">
+  <div>
+    <div class="eyebrow">// software measurement in the age of AI</div>
+    <h1>When code is cheap, <span class="hl">measure what it costs you.</span></h1>
+    <p class="lead">AI writes more of our code every month. Lines of code and story points tell us less than ever. MetricZone covers the metrics that matter for software teams today, how to measure them, and which new research is worth reading.</p>
+    <div class="cta">
+      <a class="btn primary" href="#metrics">Explore the metrics →</a>
+      <a class="btn ghost" href="#check">Check your own metric</a>
+    </div>
+  </div>
+  <div class="console reveal" aria-hidden="true">
+    <div class="bar"><i></i><i></i><i></i><span>metriczone ~ measure</span></div>
+    <div class="term" id="term"></div>
+    <div class="gauges">
+      <div class="gauge"><small>lead time</small><canvas data-c="#37e6a5"></canvas></div>
+      <div class="gauge"><small>rework rate</small><canvas data-c="#ffb547"></canvas></div>
+      <div class="gauge"><small>change failure</small><canvas data-c="#7aa2ff"></canvas></div>
+    </div>
+  </div>
+</header>
+
+<!-- METRICS -->
+<section id="metrics">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div><span class="num">01 / metrics that matter</span><h2>What to measure in 2026</h2></div>
+      <p>Twenty metrics in six areas. Click a card to see how to measure the metric and what to watch out for.</p>
+    </div>
+    <div class="chips reveal" id="mchips"></div>
+    <div class="metrics" id="mgrid"></div>
+  </div>
+</section>
+
+<!-- HOW TO -->
+<section id="howto">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div><span class="num">02 / how to measure</span><h2>From information need to decision</h2></div>
+      <p>The measurement information model from ISO/IEC 15939 still works. Start from the decision, not from the data you happen to have.</p>
+    </div>
+    <div class="flow reveal">
+      <div class="step"><b>01</b><h4>Information need</h4><p>Which decision, by whom? “Can we release on Friday?”</p></div>
+      <div class="step"><b>02</b><h4>Base measures</h4><p>Raw counts collected automatically: open defects, failed builds.</p></div>
+      <div class="step"><b>03</b><h4>Derived measures</h4><p>Combine them: defect inflow per week, failure rate.</p></div>
+      <div class="step"><b>04</b><h4>Indicator</h4><p>Add decision criteria: green, yellow, red, with agreed thresholds.</p></div>
+      <div class="step"><b>05</b><h4>Decision</h4><p>Show it where the stakeholder already looks, and act on it.</p></div>
+      <div class="step"><b>06</b><h4>Review</h4><p>Retire indicators nobody acts on. Recalibrate thresholds.</p></div>
+    </div>
+    <div class="principles">
+      <div class="pr reveal"><h4>Actionable over interesting</h4><p>If nobody can say what they would do when the number changes, it is not a metric. It is trivia.</p></div>
+      <div class="pr reveal"><h4>Telemetry first, surveys second</h4><p>Collect automatically from pipelines, repos and IDEs. Use surveys as an occasional temperature check.</p></div>
+      <div class="pr reveal"><h4>Pair speed with stability</h4><p>Every speed metric needs a quality counterpart. Faster cycle time with doubled rework is not progress.</p></div>
+      <div class="pr reveal"><h4>Beware vanity metrics</h4><p>“Lines generated by AI” or “prompts per day” go up and to the right and tell you nothing about value.</p></div>
+      <div class="pr reveal"><h4>Trends, not snapshots</h4><p>A single value invites argument. A trend with thresholds invites a decision.</p></div>
+      <div class="pr reveal"><h4>Give the metric team a mandate</h4><p>Measurement programs last when they have a formal mandate, sit inside product development and keep a stable team.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CHECK -->
+<section id="check">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div><span class="num">03 / metric check</span><h2>Is your metric worth keeping?</h2></div>
+      <p>Think of one metric your team reports today and tick what is true for it.</p>
+    </div>
+    <div class="check">
+      <div class="qs" id="qs"></div>
+      <div class="verdict reveal">
+        <div class="dial">
+          <svg width="170" height="170" viewBox="0 0 170 170"><circle cx="85" cy="85" r="72" stroke="#232c40" stroke-width="14" fill="none"/><circle id="arc" cx="85" cy="85" r="72" stroke="#ff6b6b" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="452.4" stroke-dashoffset="452.4" style="transition:stroke-dashoffset .5s,stroke .5s"/></svg>
+          <div class="val" id="score">0</div>
+        </div>
+        <h3 id="vt">Vanity metric</h3>
+        <p id="vp">Tick the statements that are true for your metric.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOG -->
+<section id="blog">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div><span class="num">04 / from the blog</span><h2>Notes on metrics &amp; software engineering</h2></div>
+      <p>Posts from the <a href="https://metrics.blogg.gu.se" target="_blank" rel="noopener">SE metrics blog</a>, including reviews of new research. New posts appear here automatically every day.</p>
+    </div>
+    <div class="chips" id="bchips"></div>
+    <div class="posts" id="posts"></div>
+    <div class="center"><button class="btn ghost" id="moreposts">Show more posts</button></div>
+  </div>
+</section>
+
+<!-- DEEPER -->
+<section id="deeper">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div><span class="num">05 / go deeper</span><h2>Books on measurement</h2></div>
+      <p>For the full method, with examples from industrial measurement programs.</p>
+    </div>
+    <div class="deeper">
+      <a class="book reveal" href="https://www.amazon.com/Software-Development-Measurement-Programs-Management-ebook/dp/B07FLJXW7J/" target="_blank" rel="noopener">
+        <img src="https://miroslawstaron.github.io/images/software_development_measurement.jpg" alt="" loading="lazy">
+        <div><h4>Software Development Measurement Programs</h4><p>Building measurement programs that are grounded, cost-aware and used for decisions.</p></div>
+      </a>
+      <a class="book reveal" href="https://www.amazon.com/Engineering-Generative-AI-Based-Software-Miroslaw-ebook/dp/B0DQR3TB8J/" target="_blank" rel="noopener">
+        <img src="https://miroslawstaron.github.io/images/book_cover_engineering.jpg" alt="" loading="lazy">
+        <div><h4>Engineering Generative AI-Based Software</h4><p>Including how to evaluate and monitor GenAI systems once they are in production.</p></div>
+      </a>
+      <a class="book reveal" href="https://www.amazon.com/Learning-Infrastructure-Practices-Software-Engineers-ebook/dp/B0CQG9K99S/" target="_blank" rel="noopener">
+        <img src="https://miroslawstaron.github.io/images/machine_learning.jpg" alt="" loading="lazy">
+        <div><h4>Machine Learning Infrastructure and Best Practices</h4><p>Data quality, testing and measurement for ML systems.</p></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="contact">
+  <div class="wrap reveal">
+    <span class="num">06 / talk metrics</span>
+    <h2>Building a measurement program?</h2>
+    <p>Designing indicators for an AI-heavy team, setting up dashboards, or checking whether your metrics drive decisions: get in touch.</p>
+    <a class="btn primary" href="mailto:miroslaw.staron@chalmers.se?subject=MetricZone%20enquiry">Get in touch →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="yr"></span> MetricZone · curated by <a href="https://miroslawstaron.github.io/">Miroslaw Staron</a></span>
+    <span><a href="https://metrics.blogg.gu.se">blog</a> · <a href="https://www.linkedin.com/in/miroslawstaron/">linkedin</a> · <a href="https://github.com/miroslawstaron">github</a></span>
+  </div>
+</footer>
+
+<script>
+/* ---------- CONTENT ---------- */
+const AREAS = {
+  flow:{n:"delivery flow",c:"#37e6a5"},
+  ai:{n:"AI-assisted development",c:"#ffb547"},
+  code:{n:"code & design",c:"#7aa2ff"},
+  ml:{n:"AI/ML systems",c:"#c792ea"},
+  run:{n:"runtime & cost",c:"#4dd0e1"},
+  ppl:{n:"people",c:"#ff8a80"}
+};
+const METRICS = [
+  {a:"flow",t:"Lead time for changes",w:"How long a change takes from commit to production.",h:"Timestamps from version control and the deployment pipeline. Report the median and 85th percentile.",x:"Averages hide the long tail, and the tail is where the problems are."},
+  {a:"flow",t:"Deployment frequency",w:"How often you ship value to users.",h:"Count of successful production deployments per day or week, from CD logs.",x:"Splitting work into trivial deployments games it. Read it together with change failure rate."},
+  {a:"flow",t:"Change failure rate",w:"The share of deployments that cause an incident, rollback or hotfix.",h:"Link incidents and rollbacks to deployment IDs and divide by total deployments.",x:"Needs an agreed definition of “failure”. Otherwise teams will argue about it."},
+  {a:"flow",t:"Time to restore",w:"How fast you recover when something breaks.",h:"Incident open to resolved, from the incident management tool.",x:"Measure customer impact, not ticket status."},
+  {a:"ai",t:"AI acceptance rate",w:"The share of AI suggestions that developers keep.",h:"IDE and assistant telemetry: suggestions shown versus suggestions retained after N minutes.",x:"High acceptance is not high quality. On its own this is a usage metric, not a value metric."},
+  {a:"ai",t:"Rework rate",w:"How much new code is rewritten or reverted soon after it is merged.",h:"Git history: lines changed again within 14–30 days, split by AI-heavy and human-written changes.",x:"The best single counterweight to speed gains from AI."},
+  {a:"ai",t:"Comprehension debt",w:"Code that is merged but that nobody on the team can explain.",h:"Proxies: review minutes per changed line, ownership spread, post-merge defects in AI-heavy files.",x:"Invisible until an incident. Track it before you need it."},
+  {a:"ai",t:"Agent task success",w:"How often an AI agent completes a real backlog task correctly.",h:"Replay closed tickets from your own backlog and check them with your test suite (pass@k).",x:"Public benchmarks rarely match your codebase. Measure on your own tasks."},
+  {a:"code",t:"Design conformance",w:"Whether new code still follows the architecture and design models.",h:"Rule checks for dependencies, layers and state machines in CI. Report violations per change.",x:"LLMs can fix a bug and quietly break the design. This catches it."},
+  {a:"code",t:"Complexity × churn hotspots",w:"Files that are both complex and changing often.",h:"Cyclomatic complexity times the number of commits per file over a quarter. Rank the top 10.",x:"Complexity alone flags stable legacy code that nobody needs to touch."},
+  {a:"code",t:"Review effectiveness",w:"Whether reviews find problems or just approve.",h:"Time to first review, comments per review, defects found after merge, review order of risky files.",x:"Counting comments rewards nit-picking. Look at defects that escape."},
+  {a:"code",t:"Technical debt trend",w:"Whether debt is growing faster than you pay it back.",h:"Static analysis debt estimate per release, plus debt-labelled tickets opened versus closed.",x:"Absolute numbers depend on the tool. Only the trend means something."},
+  {a:"ml",t:"Data quality",w:"Completeness, freshness and drift of the data your models depend on.",h:"Automated checks in the data pipeline: missing values, schema changes, distribution drift.",x:"Model metrics fail silently when data quality drops."},
+  {a:"ml",t:"Evaluation pass rate",w:"How an LLM or model scores on your own golden test set.",h:"A versioned evaluation set, run on every prompt, model or retrieval change.",x:"Change the test set and you lose comparability. Version it like code."},
+  {a:"ml",t:"Guardrail interventions",w:"How often safety and policy guardrails block or rewrite outputs.",h:"Interventions per 1,000 calls, by type, from guardrail logs.",x:"A sudden drop can mean a broken guardrail, not better behaviour."},
+  {a:"run",t:"Cost per successful task",w:"What one useful AI-assisted outcome costs in tokens and compute.",h:"Token and compute spend divided by tasks that pass acceptance.",x:"Cost per call looks cheap until retries and failed attempts are included."},
+  {a:"run",t:"SLO attainment",w:"Whether users get the reliability you promised them.",h:"Share of time within the service level objective. Track how fast the error budget is used up.",x:"Too many SLOs and none of them matter. Start with 2–3 user journeys."},
+  {a:"run",t:"Energy per transaction",w:"The energy footprint of running and building your software.",h:"Power telemetry or cloud carbon tools, divided by transactions or builds.",x:"Rough estimates are fine. What matters is the trend after each change."},
+  {a:"ppl",t:"Developer trust in AI",w:"Whether developers trust, verify or blindly rely on AI output.",h:"Short quarterly pulse survey, combined with review behaviour on AI-heavy changes.",x:"Both too much and too little trust are risks."},
+  {a:"ppl",t:"Burnout & ownership",w:"Whether the pace is sustainable and people still feel they own the code.",h:"Pulse surveys plus signals such as after-hours commits and on-call load.",x:"Never use this for individual performance. Aggregate only."}
+];
+const QUESTIONS = [
+  "It answers a question that a named person or team needs answered",
+  "Someone has decided what they will do if it goes red",
+  "It is collected automatically, without manual reporting",
+  "It is updated often enough to act on (at least weekly)",
+  "It has thresholds or a target that people agree on",
+  "It is balanced by a quality or stability counterpart",
+  "It is hard to game without improving the real outcome",
+  "It has led to a concrete decision in the last three months"
+];
+const FALLBACK_POSTS = [{"title": "Software Engineering with Agents – there is a need for more humanity in SE and beyond", "link": "https://metrics.blogg.gu.se/?p=1050", "date": "2026-08-10", "cats": ["software engineering"], "summary": "Reflections after FSE in Montreal: more AI papers, fewer field studies. Benchmarks look impressive, but we still need empirical evidence from real teams and human judgment in the loop."}, {"title": "Summer 2026 – where are we going now?", "link": "https://metrics.blogg.gu.se/?p=1045", "date": "2026-07-13", "cats": ["software engineering"], "summary": "With AI writing more of the code, engineers can focus on design, specifications and guardrails. AI amplifies expertise rather than replacing it."}, {"title": "Levels of automated code development…", "link": "https://metrics.blogg.gu.se/?p=1038", "date": "2026-07-10", "cats": ["article review", "machine learning", "software engineering"], "summary": "A review of a taxonomy that grades AI code generation from L0 (token-level help) to L5 (full automation). A useful vocabulary for deciding who is responsible for what."}, {"title": "What are you talking about – one agent asked another…", "link": "https://metrics.blogg.gu.se/?p=1035", "date": "2026-07-03", "cats": ["article review", "code review", "machine learning", "metrics"], "summary": "When two agents program together, high semantic-alignment scores can be a warning sign of agents echoing each other. A lesson in how a metric can mislead."}, {"title": "Can we force LLMs to generate the code we really want?", "link": "https://metrics.blogg.gu.se/?p=1030", "date": "2026-06-18", "cats": ["article review", "machine learning"], "summary": "Thirteen LLMs, one question: can feedback enforce design patterns? Simple iterative pass/fail feedback worked best, and functionality did not suffer."}, {"title": "My prompt is better than your prompt – how to optimize your prompts in the age of agentic AI", "link": "https://metrics.blogg.gu.se/?p=1027", "date": "2026-06-12", "cats": ["article review"], "summary": "Reinforcement learning with rewards shaped by unit-test results improves prompts beyond what manual prompt engineering achieves."}, {"title": "15 years of Software Center – A Look in the Mirror and over the Front Windshield", "link": "https://metrics.blogg.gu.se/?p=1041", "date": "2026-06-10", "cats": ["software engineering", "metrics"], "summary": "From agile and architecture, through DevOps and CI/CD, to ML and AI: how fifteen years of industry–academia work shifted what companies need to measure."}, {"title": "Junior Architects with Shaky Logic: Testing AI's Real-World Coding Skills – article review", "link": "https://metrics.blogg.gu.se/?p=1024", "date": "2026-06-05", "cats": ["software engineering"], "summary": "Three LLMs against 212 real production commits: success rates from 0 to 60%. Good at small routine functions, not to be trusted alone with critical code."}, {"title": "The Synthetic Engineer: Measuring the Real Impact of AI on Software Delivery", "link": "https://metrics.blogg.gu.se/?p=1020", "date": "2026-05-18", "cats": ["software engineering", "metrics"], "summary": "A framework combining DORA metrics, AI usage and effect metrics (acceptance, rework, stability) and occasional developer surveys, and a warning about vanity metrics such as lines of code generated."}, {"title": "From Gutenberg to Google and on to AI", "link": "https://metrics.blogg.gu.se/?p=1016", "date": "2026-05-11", "cats": ["software engineering"], "summary": "Like compilers hid the hardware, LLMs hide programming details, opening software creation to product owners and requirements engineers."}, {"title": "How to improve the code reviews", "link": "https://metrics.blogg.gu.se/?p=904", "date": "2024-09-23", "cats": ["code review", "metrics"], "summary": "Reordering files in a review so the riskiest come first raises reviewer engagement and comment quality. Size metrics and LLMs can pick those files automatically."}, {"title": "Assessing the maturity of a metric team", "link": "https://metrics.blogg.gu.se/?p=644", "date": "2021-06-04", "cats": ["metrics"], "summary": "Three things make measurement programs last: a formal mandate, integration with product development, and a stable team over time."}, {"title": "Can we predict quality of service level quality based on metrics?", "link": "https://metrics.blogg.gu.se/?p=535", "date": "2020-08-17", "cats": ["metrics", "quality"], "summary": "Across 700+ web services, code and interface metrics correlate with response time, availability and throughput."}, {"title": "Your code and AI – more than precision and recall!", "link": "https://metrics.blogg.gu.se/?p=531", "date": "2020-08-13", "cats": ["metrics", "machine learning"], "summary": "AI tools for code quality should be judged by their effect on the product, not only by precision, recall and F1."}, {"title": "Actionable software metrics – an interesting new article", "link": "https://metrics.blogg.gu.se/?p=503", "date": "2020-06-26", "cats": ["metrics"], "summary": "A metric is actionable when it is practical, supports a decision and is fresh enough to matter. Metrics that apply across products trigger more action."}, {"title": "Succeeding with large scale measurement programs", "link": "https://metrics.blogg.gu.se/?p=527", "date": "2020-05-29", "cats": ["metrics"], "summary": "Measurement programs succeed when built around decisions: measurement systems, information quality and indicators that trigger action."}];
+
+/* ---------- RENDER ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// metrics catalog
+let marea = "all";
+$("#mchips").innerHTML = `<button class="on" data-a="all">all</button>` + Object.entries(AREAS).map(([k,v]) => `<button data-a="${k}">${v.n}</button>`).join("");
+$("#mgrid").innerHTML = METRICS.map(m => `
+  <button class="metric reveal" data-a="${m.a}" aria-expanded="false">
+    <span class="plus">+</span>
+    <div class="cat" style="color:${AREAS[m.a].c}">${AREAS[m.a].n}</div>
+    <h3>${esc(m.t)}</h3>
+    <p class="why">${esc(m.w)}</p>
+    <dl class="more"><dt>how to measure</dt><dd>${esc(m.h)}</dd><dt>watch out</dt><dd class="warn">${esc(m.x)}</dd></dl>
+  </button>`).join("");
+document.querySelectorAll(".metric").forEach(el => el.onclick = () => { const o = el.classList.toggle("open"); el.setAttribute("aria-expanded", o); });
+document.querySelectorAll("#mchips button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("#mchips button").forEach(x => x.classList.remove("on")); b.classList.add("on");
+  marea = b.dataset.a;
+  document.querySelectorAll(".metric").forEach(el => { const hide = marea !== "all" && el.dataset.a !== marea; el.classList.toggle("hide", hide); if(!hide) el.classList.add("in"); });
+});
+
+// metric check
+$("#qs").innerHTML = QUESTIONS.map((q,i) => `<label class="q reveal"><input type="checkbox" data-i="${i}"><span>${esc(q)}</span></label>`).join("");
+function score(){
+  const n = document.querySelectorAll("#qs input:checked").length, pct = n / QUESTIONS.length;
+  $("#score").textContent = n + "/" + QUESTIONS.length;
+  const arc = $("#arc"); arc.style.strokeDashoffset = 452.4 * (1 - pct);
+  let col = "#ff6b6b", t = "Vanity metric", p = "Collecting it probably costs more than it gives back. Rethink it or retire it.";
+  if (n >= 3) { col = "#ffb547"; t = "Promising, but passive"; p = "It informs, but doesn't yet drive decisions. Add a stakeholder, thresholds and a counterpart."; }
+  if (n >= 6) { col = "#37e6a5"; t = "Actionable indicator"; p = "This is a metric worth keeping. Make sure it is still reviewed as the team changes."; }
+  arc.style.stroke = col; $("#vt").textContent = t; $("#vp").textContent = n ? p : "Tick the statements that are true for your metric.";
+}
+document.querySelectorAll("#qs input").forEach(i => i.onchange = score);
+
+// blog
+let posts = [], bcat = "all", showN = 6;
+function catGroup(p){ const c = p.cats.join(" ").toLowerCase(); return { metrics: /metric|quality|visualiz/.test(c), ai: /machine learning/.test(c), review: /review/.test(c) }; }
+function renderPosts(){
+  const list = posts.filter(p => bcat === "all" || catGroup(p)[bcat]);
+  $("#posts").innerHTML = list.slice(0, showN).map(p => `
+    <a class="post" href="${esc(p.link)}" target="_blank" rel="noopener">
+      <time>${new Date(p.date).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})}</time>
+      <h3>${esc(p.title)}</h3><p>${esc(p.summary)}</p>
+      <div class="tags">${p.cats.slice(0,3).map(c => `<span class="tag${/metric/.test(c)?' m':''}">${esc(c)}</span>`).join("")}</div>
+      <span class="go">read on the blog ↗</span>
+    </a>`).join("");
+  $("#moreposts").style.display = list.length > showN ? "" : "none";
+}
+$("#bchips").innerHTML = [["all","all posts"],["metrics","metrics & quality"],["ai","AI & ML"],["review","article reviews"]].map(([k,v],i) => `<button class="${i?'':'on'}" data-c="${k}">${v}</button>`).join("");
+document.querySelectorAll("#bchips button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("#bchips button").forEach(x => x.classList.remove("on")); b.classList.add("on");
+  bcat = b.dataset.c; showN = 6; renderPosts();
+});
+$("#moreposts").onclick = () => { showN += 6; renderPosts(); };
+fetch("posts.json", {cache:"no-cache"}).then(r => r.json()).then(d => { posts = d; }).catch(() => { posts = FALLBACK_POSTS; })
+  .finally(() => { posts.sort((a,b) => b.date.localeCompare(a.date)); renderPosts(); });
+
+$("#yr").textContent = new Date().getFullYear();
+
+// reveal
+const io = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target);} }), {threshold:.1});
+document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+
+// terminal
+const LINES = [
+  ["measure lead_time --p85 --last 90d", "→ indicator: delivery speed · trend ▲ improving"],
+  ["measure rework_rate --split ai,human", "→ pair every speed gain with a stability check"],
+  ["check metric 'lines generated by AI'", "→ vanity metric ✗ no decision attached"],
+  ["eval agent --tasks backlog/closed --pass@3", "→ measure on your own tasks, not benchmarks"],
+  ["indicator publish --audience release-board", "→ decisions, not just data"]
+];
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+(async function(){
+  const term = $("#term"); let i = 0;
+  while(true){
+    const [cmd,out] = LINES[i++ % LINES.length];
+    term.innerHTML = `<span class="p">$</span> <span id="cmd"></span><span class="cursor"></span>`;
+    const c = term.querySelector("#cmd");
+    for(const ch of cmd){ c.textContent += ch; await sleep(reduce?0:32); }
+    await sleep(400); term.querySelector(".cursor").remove();
+    term.insertAdjacentHTML("beforeend", `<div class="o" style="margin-top:8px">${out}</div><div style="margin-top:8px"><span class="p">$</span> <span class="cursor"></span></div>`);
+    await sleep(2800);
+  }
+})();
+
+// sparklines
+document.querySelectorAll(".gauge canvas").forEach(cv => {
+  const ctx = cv.getContext("2d"), col = cv.dataset.c, pts = []; let v = .5;
+  for(let i=0;i<40;i++){ v = Math.min(.95,Math.max(.1,v+(Math.random()-.45)*.12)); pts.push(v); }
+  function draw(){
+    const w = cv.width = cv.clientWidth*devicePixelRatio, h = cv.height = cv.clientHeight*devicePixelRatio;
+    const g = ctx.createLinearGradient(0,0,0,h); g.addColorStop(0,col+"55"); g.addColorStop(1,col+"00");
+    ctx.beginPath(); pts.forEach((p,i)=>{ const x=i/(pts.length-1)*w, y=h-p*h; i?ctx.lineTo(x,y):ctx.moveTo(x,y); });
+    ctx.strokeStyle=col; ctx.lineWidth=2*devicePixelRatio; ctx.stroke(); ctx.lineTo(w,h); ctx.lineTo(0,h); ctx.fillStyle=g; ctx.fill();
+  }
+  draw(); addEventListener("resize", draw);
+  if(!reduce) setInterval(()=>{ pts.shift(); pts.push(Math.min(.95,Math.max(.1,pts[pts.length-1]+(Math.random()-.45)*.12))); draw(); }, 900);
+});
+
+// background
+(function(){
+  const cv = $("#grid"), ctx = cv.getContext("2d"); let w,h,dots;
+  function init(){ w=cv.width=innerWidth; h=cv.height=innerHeight; dots=Array.from({length:Math.min(60,Math.floor(w/22))},()=>({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25})); }
+  function frame(){
+    ctx.clearRect(0,0,w,h); ctx.strokeStyle="rgba(122,162,255,.05)"; ctx.lineWidth=1;
+    for(let x=0;x<w;x+=48){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();}
+    for(let y=0;y<h;y+=48){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}
+    dots.forEach(d=>{d.x+=d.vx;d.y+=d.vy;if(d.x<0||d.x>w)d.vx*=-1;if(d.y<0||d.y>h)d.vy*=-1;});
+    for(let i=0;i<dots.length;i++)for(let j=i+1;j<dots.length;j++){const a=dots[i],b=dots[j],dd=Math.hypot(a.x-b.x,a.y-b.y);
+      if(dd<130){ctx.strokeStyle=`rgba(55,230,165,${.12*(1-dd/130)})`;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}}
+    ctx.fillStyle="rgba(55,230,165,.5)"; dots.forEach(d=>{ctx.beginPath();ctx.arc(d.x,d.y,1.6,0,7);ctx.fill();});
+    if(!reduce) requestAnimationFrame(frame);
+  }
+  init(); frame(); addEventListener("resize",()=>{init(); if(reduce) frame();});
+})();
+</script>
+</body>
+</html>
