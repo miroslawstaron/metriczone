@@ -1,5 +1,14 @@
 [
  {
+  "title": "The road to an AI-first organization – what 40 embedded software engineers told us",
+  "link": "https://metrics.blogg.gu.se/?p=1058",
+  "date": "2026-11-05",
+  "cats": [
+   "software engineering"
+  ],
+  "summary": "arxiv.org/pdf/2609.30863 Everybody talks about AI agents these days. Most of the discussion is about the tools: which model is better, which agent framework to pick, how many tokens it takes to fix a bug. Much less is said about the organization that has to…"
+ },
+ {
   "title": "Incorruptible…",
   "link": "https://metrics.blogg.gu.se/?p=1055",
   "date": "2026-10-29",
