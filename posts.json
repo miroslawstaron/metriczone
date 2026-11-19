@@ -1,5 +1,14 @@
 [
  {
+  "title": "Who changed the AI agent’s rules?",
+  "link": "https://metrics.blogg.gu.se/?p=1064",
+  "date": "2026-11-19",
+  "cats": [
+   "software engineering"
+  ],
+  "summary": "Image: illustration made with Claude for this post We spend a lot of time measuring what AI coding agents produce. Does the code compile, do the tests pass, how fast does the PR get merged? It’s been a trend in software metrics to trace such simple ones and…"
+ },
+ {
   "title": "The road to an AI-first organization – what 40 embedded software engineers told us",
   "link": "https://metrics.blogg.gu.se/?p=1058",
   "date": "2026-11-05",
