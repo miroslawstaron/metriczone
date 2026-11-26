@@ -1,5 +1,14 @@
 [
  {
+  "title": "If the pull request goes away, where does the review go?",
+  "link": "https://metrics.blogg.gu.se/?p=1067",
+  "date": "2026-11-26",
+  "cats": [
+   "software engineering"
+  ],
+  "summary": "Suppose I ask a coding agent to explain a change, spot a problem in the explanation, and ask it to revise the code. By the time I open a pull request, I’ve already done some review. This is the part that caught my attention in Christoph Treude and Sebastian…"
+ },
+ {
   "title": "Who changed the AI agent’s rules?",
   "link": "https://metrics.blogg.gu.se/?p=1064",
   "date": "2026-11-19",
